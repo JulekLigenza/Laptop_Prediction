@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laptop Price Prediction</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+    <h1>Laptop Price Prediction</h1>
+
+    <form method="POST">
+        <label for="ram">RAM (GB): </label>
+        <select id="ram" name="ram" required>
+            <option value="" disabled selected>Select RAM</option>
+            {% for ram in ram_sizes %}
+                <option value="{{ ram }}">{{ ram }} GB</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="storage">Storage (GB): </label>
+        <select id="storage" name="storage" required>
+            <option value="" disabled selected>Select Storage</option>
+            {% for storage in storages %}
+                <option value="{{ storage }}">{{ storage }} GB</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="screen">Screen Size (inches): </label>
+        <select id="screen" name="screen" required>
+            <option value="" disabled selected>Select Screen Size</option>
+            {% for screen in screens %}
+                <option value="{{ screen }}">{{ screen }} inches</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="brand">Brand: </label>
+        <select id="brand" name="brand" required>
+            <option value="" disabled selected>Select Brand</option>
+            {% for brand in brands %}
+                <option value="{{ brand }}">{{ brand }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="cpu">CPU: </label>
+        <select id="cpu" name="cpu" required>
+            <option value="" disabled selected>Select CPU</option>
+            {% for cpu in cpus %}
+                <option value="{{ cpu }}">{{ cpu }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="gpu">GPU: </label>
+        <select id="gpu" name="gpu" required>
+            <option value="" disabled selected>Select GPU</option>
+            {% for gpu in gpus %}
+                <option value="{{ gpu }}">{{ gpu }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="storage_type">Storage Type (SSD/HDD): </label>
+        <select id="storage_type" name="storage_type" required>
+            <option value="" disabled selected>Select Storage Type</option>
+            {% for storage_type in storage_types %}
+                <option value="{{ storage_type }}">{{ storage_type }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <label for="status">Status: </label>
+        <select id="status" name="status" required>
+            <option value="" disabled selected>Select Status</option>
+            <option value="New">New</option>
+            <option value="Used">Used</option>
+        </select><br><br>
+
+        <label for="model">Model: </label>
+        <select id="model" name="model" required>
+            <option value="" disabled selected>Select Model</option>
+            {% for model in models %}
+                <option value="{{ model }}">{{ model }}</option>
+            {% endfor %}
+        </select><br><br>
+
+        <input type="submit" value="Predict Price">
+    </form>
+</div>
+
+</body>
+</html>

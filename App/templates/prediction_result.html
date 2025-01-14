@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+     <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 60%;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            text-align: center;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+            font-size: 16px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        a {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            text-align: center;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+
+        a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Prediction Result</h1>
+     <p><strong>Predicted Price:</strong> {{ "%.2f"|format(predicted_price) }} EUR</p>
+
+    <h3>Selected Laptop Details:</h3>
+    <ul>
+        <li><strong>Brand:</strong> {{ laptop_data['Brand'] }}</li>
+        <li><strong>CPU:</strong> {{ laptop_data['CPU'] }}</li>
+        <li><strong>RAM:</strong> {{ laptop_data['RAM'] }} GB</li>
+        <li><strong>Storage:</strong> {{ laptop_data['Storage'] }} GB</li>
+        <li><strong>Screen Size:</strong> {{ laptop_data['Screen'] }} inches</li>
+        <li><strong>GPU:</strong> {{ laptop_data['GPU'] }}</li>
+        <li><strong>Storage Type:</strong> {{ laptop_data['Storage type'] }}</li>
+        <li><strong>Status:</strong> {{ laptop_data['Status'] }}</li>
+        <li><strong>Model:</strong> {{ laptop_data['Model'] }}</li>
+    </ul>
+
+    <a href="{{ url_for('home') }}" class="back-btn">Go Back</a>
+</div>
+
+</body>
+</html>
