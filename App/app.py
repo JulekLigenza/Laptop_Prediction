@@ -1,68 +1,57 @@
-from flask import Flask, render_template, request
+from flask import Flask, request, render_template
 import pandas as pd
 from pycaret.regression import load_model, predict_model
 
+# Inicjalizacja aplikacji Flask
 app = Flask(__name__)
 
-# Load pre-trained model
+# Załaduj wytrenowany model
 model = load_model('model/optimized_price_prediction_model')
 
-# Function to read options for each field from the CSV
-def get_unique_options(column_name):
-    # For simplicity, we assume the column names in the CSV match these values.
-    # You should read from a CSV or a database to dynamically populate options.
-    data = pd.read_csv('laptops.csv')
-    return data[column_name].dropna().unique()
 
-# Function to process and predict the price
+# Funkcja do przewidywania ceny laptopa
 def predict_laptop_price(laptop_data):
     input_data = pd.DataFrame([laptop_data])
     predictions = predict_model(model, data=input_data)
     predicted_price = predictions['prediction_label'][0]
     return predicted_price
 
+
+# Strona główna
 @app.route('/', methods=['GET', 'POST'])
 def home():
-    ram_sizes = get_unique_options('RAM')
-    storages = get_unique_options('Storage')
-    screens = get_unique_options('Screen')
-    brands = get_unique_options('Brand')
-    cpus = get_unique_options('CPU')
-    gpus = get_unique_options('GPU')
-    storage_types = get_unique_options('Storage type')
-    models = get_unique_options('Model')
-
     if request.method == 'POST':
         laptop_data = {
-            "RAM": int(request.form.get('ram', 0)),
-            "Storage": int(request.form.get('storage', 0)),
-            "Screen": float(request.form.get('screen', 0.0)),
-            "Brand": request.form.get('brand', ''),
-            "CPU": request.form.get('cpu', ''),
-            "GPU": request.form.get('gpu', ''),
-            "Storage type": request.form.get('storage_type', ''),
-            "Status": request.form.get('status', ''),
-            "Model": request.form.get('model', '')
+            "RAM": int(request.form['ram']),
+            "Storage": int(request.form['storage']),
+            "Screen": float(request.form['screen']),
+            "Brand": request.form['brand'],
+            "CPU": request.form['cpu'],
+            "GPU": request.form['gpu'],
+            "Storage type": request.form['storage_type'],
+            "Status": request.form['status'],
+            "Model": request.form['model']
         }
-
-        if not all(laptop_data.values()):
-            return "Error: All fields must be selected", 400  # Return an error if any field is missing
-
         predicted_price = predict_laptop_price(laptop_data)
-
+        predicted_price = round(predicted_price, 2)  # Zaokrąglenie do 2 miejsc po przecinku
         return render_template('prediction_result.html', predicted_price=predicted_price, laptop_data=laptop_data)
 
-    return render_template(
-        'index.html',
-        ram_sizes=ram_sizes,
-        storages=storages,
-        screens=screens,
-        brands=brands,
-        cpus=cpus,
-        gpus=gpus,
-        storage_types=storage_types,
-        models=models
-    )
+    # Dane do formularza (przykład, wczytywane z CSV)
+    ram_sizes = [2, 4, 8, 16]
+    storages = [128, 256, 512, 1024]
+    screens = [13, 14, 15.6]
+    brands = ['Dell', 'HP', 'Asus', 'Lenovo']
+    cpus = ['Intel Core i3', 'Intel Core i5', 'Intel Core i7', 'AMD Ryzen 5']
+    gpus = ['Intel UHD', 'NVIDIA GTX 1650', 'NVIDIA RTX 2060']
+    storage_types = ['SSD', 'HDD']
+    models = ['XPS 15', 'MacBook Pro', 'Asus ROG', 'HP Spectre']
 
-if __name__ == '__main__':
-    app.run(debug=True)
+    return render_template('index.html', ram_sizes=ram_sizes, storages=storages, screens=screens,
+                           brands=brands, cpus=cpus, gpus=gpus, storage_types=storage_types, models=models)
+
+
+# Uruchomienie aplikacji przy użyciu Waitress
+if __name__ == "__main__":
+    from waitress import serve
+
+    serve(app, host="0.0.0.0", port=5000)
